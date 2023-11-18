@@ -14,9 +14,10 @@ async function createSnippet(formData: FormData) {
         code,
       },
     });
-    redirect("/");
   } catch (e) {
     console.error(e);
+  } finally {
+    redirect("/");
   }
 }
 
