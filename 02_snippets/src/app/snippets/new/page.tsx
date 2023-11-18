@@ -1,30 +1,16 @@
-import { db } from "@/db";
-import { redirect } from "next/navigation";
+"use client";
 
-async function createSnippet(formData: FormData) {
-  "use server";
-  const title = formData.get("title");
-  const code = formData.get("code");
-  if (!title || !code) return;
-  if (title instanceof File || code instanceof File) return;
-  try {
-    await db.snippet.create({
-      data: {
-        title,
-        code,
-      },
-    });
-  } catch (e) {
-    console.error(e);
-  } finally {
-    redirect("/");
-  }
-}
+import * as actions from "@/actions";
+import { useFormState } from "react-dom";
 
 function SnippetCreatePage() {
+  const [formState, action] = useFormState(actions.createSnippet, {
+    message: "",
+  });
+
   return (
-    <form action={createSnippet}>
-      <h3 className="font-bold m-3">Create a Snippet</h3>
+    <form action={action}>
+      <h3 className="m-3 font-bold">Create a Snippet</h3>
       <div className="flex flex-col gap-4">
         <div className="flex gap-4">
           <label htmlFor="title" className="w-12">
@@ -34,7 +20,7 @@ function SnippetCreatePage() {
             type="text"
             id="title"
             name="title"
-            className="border rounded p-2 w-full"
+            className="w-full rounded border p-2"
           />
         </div>
         <div className="flex gap-4">
@@ -44,10 +30,15 @@ function SnippetCreatePage() {
           <textarea
             id="code"
             name="code"
-            className="border rounded p-2 w-full"
+            className="w-full rounded border p-2"
           />
         </div>
-        <button className="rounded p-2 bg-blue-200" type="submit">
+        {formState.message && (
+          <div className="my-2 rounded border border-red-200 bg-red-200 p-2">
+            {formState.message}
+          </div>
+        )}
+        <button className="rounded bg-blue-200 p-2" type="submit">
           Create
         </button>
       </div>
