@@ -1,5 +1,6 @@
 import { db } from "@/db";
 import { notFound } from "next/navigation";
+import Link from "next/link";
 
 async function SnippetDetailPage({ params }: { params: { id: string } }) {
   const snippet = await db.snippet.findFirst({
@@ -15,8 +16,13 @@ async function SnippetDetailPage({ params }: { params: { id: string } }) {
       <div className="m-4 flex items-center justify-between">
         <h1 className="text-xl font-bold">{snippet.title}</h1>
         <div className="flex gap-4">
-          {/* TODO: make buttons work */}
-          <button className="rounded border p-2">Edit</button>
+          <Link
+            href={`/snippets/${snippet.id}/edit`}
+            className="rounded border p-2"
+          >
+            Edit
+          </Link>
+          {/* TODO: turn the button to a link or action */}
           <button className="rounded border p-2">Delete</button>
         </div>
       </div>
