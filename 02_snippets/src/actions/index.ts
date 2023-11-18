@@ -5,7 +5,7 @@ import type { Snippet } from "@prisma/client";
 import { redirect } from "next/navigation";
 
 export async function createSnippet(
-  formState: { message: string },
+  _formState: { message: string },
   formData: FormData,
 ) {
   const title = formData.get("title");
@@ -36,9 +36,16 @@ export async function createSnippet(
     });
   } catch (e) {
     console.error(e);
-  } finally {
-    redirect("/");
+    if (e instanceof Error) {
+      return {
+        message: e.message,
+      };
+    }
+    return {
+      message: "failed to create the snippet",
+    };
   }
+  redirect("/");
 }
 
 export async function editSnippet(id: Snippet["id"], code: Snippet["code"]) {
