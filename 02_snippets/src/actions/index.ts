@@ -2,6 +2,7 @@
 
 import { db } from "@/db";
 import type { Snippet } from "@prisma/client";
+import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
 export async function createSnippet(
@@ -45,6 +46,7 @@ export async function createSnippet(
       message: "failed to create the snippet",
     };
   }
+  revalidatePath("/");
   redirect("/");
 }
 
@@ -60,5 +62,6 @@ export async function deleteSnippet(id: Snippet["id"]) {
   await db.snippet.delete({
     where: { id },
   });
+  revalidatePath("/");
   redirect("/");
 }
