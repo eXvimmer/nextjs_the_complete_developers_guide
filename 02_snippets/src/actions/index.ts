@@ -55,6 +55,7 @@ export async function editSnippet(id: Snippet["id"], code: Snippet["code"]) {
     where: { id },
     data: { code },
   });
+  revalidatePath(`/snippets/${id}`);
   redirect(`/snippets/${id}`);
 }
 

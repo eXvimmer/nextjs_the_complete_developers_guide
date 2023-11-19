@@ -38,3 +38,8 @@ async function SnippetDetailPage({ params }: { params: { id: string } }) {
 }
 
 export default SnippetDetailPage;
+
+export async function generateStaticParams() {
+  const snippets = await db.snippet.findMany();
+  return snippets.map((s) => ({ id: s.id.toString() }));
+}
