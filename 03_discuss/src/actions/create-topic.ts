@@ -2,6 +2,7 @@
 
 import { z } from "zod";
 import type { CreateTopicFormState } from "@/types";
+import { auth } from "@/auth";
 
 const createTopicSchema = z.object({
   name: z
@@ -17,6 +18,14 @@ export async function createTopic(
   _formState: CreateTopicFormState,
   formData: FormData,
 ): Promise<CreateTopicFormState> {
+  const session = await auth();
+  if (!session || !session.user) {
+    return {
+      errors: {
+        _form: ["you must be signed in to create a topic"],
+      },
+    };
+  }
   const result = createTopicSchema.safeParse({
     name: formData.get("name"),
     description: formData.get("description"),

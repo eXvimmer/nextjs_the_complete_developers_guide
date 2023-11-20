@@ -1,4 +1,4 @@
-import TopicCreateForm from "@/components/topics/topic-create";
+import TopicCreateForm from "@/components/topics/topic-create-form";
 
 export default function Home() {
   return (
